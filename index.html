@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Website — University of Peradeniya Campus Tour</title>
+    <meta name="description" content="Explore iconic landmarks of the University of Peradeniya in interactive real-time 3D Gaussian Splatting." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@1,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+
+    <!-- ═══ LANDING SCREEN (DRIBBLE THEME) ═══ -->
+    <div id="landing">
+      <!-- Top Navigation -->
+      <header class="dribbble-nav">
+        <div class="nav-container">
+          <div class="nav-left">
+            <a href="#" class="dribbble-logo">
+              <span class="logo-script">Peradeniya</span>
+              <span class="logo-badge">3D</span>
+            </a>
+            <div class="nav-search-bar">
+              <input type="text" id="searchInput" placeholder="Search landmarks (e.g. lion, gyro, senate)..." autocomplete="off" />
+              <button class="search-clear-btn hidden" id="searchClearBtn" title="Clear search" type="button">✕</button>
+              <div class="search-category" id="searchCategoryBtn">
+                <span id="categoryLabel">All</span>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+              </div>
+              <button class="search-submit-btn" id="searchSubmitBtn" aria-label="Search" type="button">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.8"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="nav-right">
+            <nav class="nav-links">
+              <a href="#landmarks" class="nav-link" id="navExploreLink">Explore <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></a>
+              <a href="#about" class="nav-link">About 3DGS</a>
+            </nav>
+            <div class="nav-actions">
+              <span class="nav-location">🇱🇰 Sri Lanka</span>
+              <button class="btn-dark-pill" id="heroExploreBtn" type="button">Explore Tour</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dribbble Promo Banner -->
+      <div class="promo-banner">
+        <div class="promo-content">
+          <span class="promo-emoji">🏛️</span>
+          <span>Explore real university landmarks reconstructed via 3D Gaussian Splatting directly in your browser.</span>
+          <button class="promo-cta" id="promoBtn" type="button">View 3D Scenes</button>
+        </div>
+      </div>
+
+      <!-- Main Showcase Container -->
+      <main class="showcase-main" id="landmarks">
+        <div class="hero-header">
+          <h1 class="hero-main-title">3D Campus Tour</h1>
+          <p class="hero-main-sub">
+            Photorealistic 3D Gaussian Splatting captures from the University of Peradeniya grounds.<br />
+            Select any landmark below to interact and explore in real-time 3D.
+          </p>
+
+          <!-- Filter tags -->
+          <div class="filter-chips" id="filterChips">
+            <button class="filter-chip active" data-filter="all" type="button">All Landmarks (2)</button>
+            <button class="filter-chip" data-filter="senate" type="button">🏛️ Senate Grounds</button>
+            <button class="filter-chip" data-filter="engineering" type="button">⚙️ Faculty of Engineering</button>
+          </div>
+        </div>
+
+        <!-- Dynamic Results Header -->
+        <div class="results-header">
+          <span id="resultsCount">Showing 2 landmarks</span>
+        </div>
+
+        <!-- Dribbble Style Shot Cards Grid -->
+        <div class="dribbble-grid" id="locationCards">
+          <!-- Rendered dynamically by main.js -->
+        </div>
+
+        <!-- Controls Guide Footer Bar -->
+        <div class="quick-guide-card">
+          <div class="guide-col">
+            <div class="guide-circle">🖱️</div>
+            <div>
+              <h4>360° Free Orbit</h4>
+              <p>Left-click and drag in any direction to rotate around the landmark.</p>
+            </div>
+          </div>
+          <div class="guide-col">
+            <div class="guide-circle">✋</div>
+            <div>
+              <h4>Pan Scene</h4>
+              <p>Right-click and drag across the screen to slide camera position.</p>
+            </div>
+          </div>
+          <div class="guide-col">
+            <div class="guide-circle">🔍</div>
+            <div>
+              <h4>Smooth Zoom</h4>
+              <p>Use your scroll wheel or trackpad pinch to inspect fine details.</p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="dribbble-footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <span class="logo-script">Peradeniya</span>
+            <p>University of Peradeniya • Interactive 3D Gaussian Splatting Virtual Tour</p>
+          </div>
+          <p class="footer-copy">© 2026 University of Peradeniya. Rendered live in WebGL.</p>
+        </div>
+      </footer>
+    </div>
+
+    <!-- ═══ VIEWER SCREEN ═══ -->
+    <div id="viewer-screen" class="hidden">
+      <!-- 3D Canvas mount -->
+      <div id="splat-container"></div>
+
+      <!-- Floating Dribbble/Apple Style Navigation Pill -->
+      <div class="viewer-pill-nav">
+        <div class="pill-nav-left">
+          <button class="pill-btn back-pill-btn" id="backBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+            <span>All Shots</span>
+          </button>
+        </div>
+
+        <div class="pill-nav-center">
+          <span class="pill-title" id="locationNameHud">Senate Lion Statue</span>
+          <span class="pill-divider">•</span>
+          <span class="pill-sub" id="locationSubHud">University of Peradeniya</span>
+        </div>
+
+        <div class="pill-nav-right">
+          <button class="pill-btn pill-btn-primary" id="switchSceneBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            <span id="switchBtnText">Switch Landmark</span>
+          </button>
+          <button class="pill-btn-icon" id="resetCameraBtn" title="Reset view">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Floating Controls Hint Pill -->
+      <div class="viewer-floating-hint">
+        <span>🖱 Left Drag: 360° Orbit</span>
+        <span class="hint-dot">•</span>
+        <span>✋ Right Drag: Pan</span>
+        <span class="hint-dot">•</span>
+        <span>⚙ Scroll: Zoom</span>
+      </div>
+
+      <!-- Loading Overlay -->
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="dribbble-loading-card">
+          <div class="dribbble-spinner"></div>
+          <h3 class="loading-title" id="loadingTitle">Loading 3D Gaussian Splats</h3>
+          <p class="loading-loc" id="loadingLocation">Senate Lion Statue</p>
+          <div class="dribbble-progress-wrap">
+            <div class="dribbble-progress-fill" id="progressBar"></div>
+          </div>
+          <div class="progress-info">
+            <span id="progressText">0%</span>
+            <span>Streaming 3D Gaussians…</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
