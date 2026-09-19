@@ -415,6 +415,7 @@ async function openViewer(loc) {
     }
 
     await viewer.addSplatScene(loc.file, {
+      format: GaussianSplats3D.SceneFormat.Ply,
       progressiveLoad: false,
       showLoadingUI: false,
       onProgress: (pct) => setProgress(pct * 100),
