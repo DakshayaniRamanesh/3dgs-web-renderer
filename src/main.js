@@ -403,6 +403,8 @@ async function openViewer(loc) {
       cameraUp:              loc.cameraUp,
       initialCameraPosition: loc.cameraPos,
       initialCameraLookAt:   loc.cameraLookAt,
+      sharedMemoryForWorkers: false,
+      gpuAcceleratedSort: false,
       showLoadingUI: false,
     });
 
